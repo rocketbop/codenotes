@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link href="http://kevinburke.bitbucket.org/markdowncss/markdown.css" rel="stylesheet"></link>
+</head>
+<body>
+	<a href="#php"><h1>PHP</h1></a>
+	<a href="#connecting-to-databases"><h3>CONNECTING TO DATABASES</h3></a>
+	<a href="#authenticate-user-function"><h4>Authenticate user function</h4></a>
+	<p>Get user credentials into a $_POST, and pass to the database with the following:</p>
+	<div class="codebox">
+		<pre>
+	function authenticateUser($username, $password) {
+		try {
+			$conn = new PDO('mysql:host=localhost;dbname=' . DB_DATABASE, DB_USER, DB_PASSWORD);
+			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$stmt = $conn->prepare('SELECT * FROM adminusers WHERE username = :username AND password = :password');
+		    $stmt->execute(array(
+		    	'username' => $username,
+		    	'password' => $password)
+		    );
+
+		    //MySQL will only return a value if a match found.
+		    if($row = $stmt->fetch()) {
+		    	return true;
+		    }
+		}
+		catch(PDOException $e) {
+		    echo 'ERROR: ' . $e->getMessage();
+		}
+	}
+	</pre>
+	</div>
+
+
+
+
+</body>
